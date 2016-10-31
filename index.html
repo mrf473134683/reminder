@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="reminder">
+<head>
+    <meta charset="UTF-8">
+    <title>reminder</title>
+    <link rel="stylesheet" href="css/index.css">
+    <script src="js/angular.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/index.js"></script>
+</head>
+<body ng-controller="mainCtrl" >
+    <div class="left">
+        <div class="logo-box">
+            <div class="re-left">
+                <div class="logo"></div>
+                <div class="tixing">
+                    <span>提醒事项</span>
+                    <div class="chevron"></div>
+                </div>
+            </div>
+            <div class="plus" ng-click="add()"></div>
+        </div>
+        <div class="plan">
+            <div class="clock"></div>
+            <span>已计划</span>
+        </div>
+
+        <div ng-color-ul>
+            <li ng-repeat="v in cates" ng-click="setcurrent(v)" class="item-list {{v.theme}}" data-id="{{v.id}}">
+                <span class="theme"></span>
+                <div class="content">
+                    <span>{{v.title}}</span>
+                    <input type="text" value="{{v.title}}" ng-model="v.title">
+                </div>
+                <div class="wifi"></div>
+            </li>
+        </div>
+    </div>
+
+    <div class="right">
+        <div class="right-top">
+            <div class="search-box">
+                <div class="search"></div>
+                <input type="text" placeholder="搜索所有提醒">
+            </div>
+            <div class="user">
+                <span>用户名</span>
+                <div class="chevron"></div>
+                <div class="why"></div>
+            </div>
+        </div>
+        <div class="right-bottom">
+            <div class="title {{current.theme}}">
+                <h1>{{current.title}}</h1>
+                <div class="xuanxiang">选项</div>
+            </div>
+
+            <div ng-init="jiantou=false">
+                <!--已完成-->
+                <div class="item-done">
+                    <span class="state" ng-click="jiantou = !jiantou"  ng-class="{active:jiantou}"></span>
+                    已完成:<span ng-bind="(current.todos|filter:{state:1}).length">0</span>项
+                </div>
+                <ul>
+                    <li class="{{current.theme}}" ng-repeat="v in current.todos|filter:{state:1}" ng-show="jiantou" >
+
+                    <span class="quan">
+                        <span class="control " ng-click="v.state=0"></span>
+                    </span>
+                        <input   type="text"  ng-model='v.title'  >
+                        <!--<span class="wenben">{{v.title}}</span>-->
+                        <span class="del icon-font icon-delete" ng-click="delete(v.id)"></span>
+                    </li>
+                </ul>
+
+                <!--未完成-->
+                <div class="item-done">
+                    <span class="state" ng-click="wei = !wei"  ng-class="{active:!wei}"></span>
+                    未完成:<span ng-bind="(current.todos|filter:{state:0}).length">0</span>项
+                </div>
+                <ul>
+                    <li class="{{current.theme}}" ng-repeat="v in current.todos|filter:{state:0}" ng-hide="wei" >
+                        <span class="quan" ng-click="v.state=1"></span>
+                        <input   type="text"  ng-model='v.title'  >
+                        <!--<span>{{v.title}}</span>-->
+                        <span class="del icon-font icon-delete" ng-click="delete(v.id)"></span>
+                    </li>
+                </ul>
+                <input class="input" ng-model="item" ng-keyup="addtodo($event)" type="text" placeholder="新项目...">
+            </div>
+
+
+            <!--选项-->
+            <my-option>
+                <div class="op-top" ng-class="current.theme">
+                    <input type="text" ng-model="current.title" ng-class="current.theme" class="active" >
+                    <div class="op-biao">列表颜色</div>
+                    <div class="color-box">
+                        <div class="yuan {{v}}" ng-repeat="v in colorss" ng-click="current.theme=v" ng-class="{active:v ===current.theme}">
+                            <span class="circle" ng-class="v"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="op-bottom">
+                    <div class="opDel" ng-click="delitem(current.id)">删除</div>
+                    <div class="opDone">完成</div>
+                    <div class="opCancel">取消</div>
+                </div>
+                <div class="sanjiao"></div>
+            </my-option>
+
+        </div>
+
+    </div>
+</body>
+</html>
